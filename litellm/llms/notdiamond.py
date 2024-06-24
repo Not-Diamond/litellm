@@ -122,6 +122,10 @@ def update_litellm_params(litellm_params: dict, litellm_provider_model: str):
     custom_llm_provider = litellm_provider_model.split("/")[0]
     litellm_params["custom_llm_provider"] = custom_llm_provider
     litellm_params["api_base"] = None
+    # first completion call adds three extra params that are not in list of litellm_params in main.completion()c
+    if "model_alias_map" in litellm_params: del litellm_params["model_alias_map"]
+    if "completion_call_id" in litellm_params: del litellm_params["completion_call_id"]
+    if "stream_response" in litellm_params: del litellm_params["stream_response"]
     return litellm_params
 
 
@@ -149,7 +153,6 @@ def completion(
         ):
             optional_params[k] = v
 
-    # TODO: do we want tool calling?
     ## Handle Tool Calling
     # if "tools" in optional_params:
     #     _is_function_call = True
@@ -189,17 +192,15 @@ def completion(
         )
     nd_response = nd_response.json()
     litellm_provider_model = get_litellm_model_provider(nd_response)
-    # litellm_provider, litellm_model = litellm_provider_model.split("/")
+    litellm_provider, litellm_model = litellm_provider_model.split("/")
 
     ## COMPLETION CALL
     # using litellm_params with completion() call leads to an error
-    # print("litellm params:", litellm_params)
-    # litellm_params = update_litellm_params(litellm_params, litellm_provider_model)
-    # print("\nlitellm params after updating:", litellm_params)
+    litellm_params = update_litellm_params(litellm_params, litellm_provider_model)
 
     model_response = litellm.completion(
-        model=litellm_provider_model,
+        model=litellm_model,
         messages=messages,
-        # **litellm_params,
+        **litellm_params,
     )
     return model_response
