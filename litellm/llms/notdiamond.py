@@ -1,3 +1,4 @@
+import asyncio
 import types
 import requests
 from typing import Callable, Optional, Dict, List
@@ -161,6 +162,19 @@ def update_litellm_params(litellm_params: dict):
     return new_litellm_params
 
 
+async def async_model_response(litellm_model, messages, selected_model_params, litellm_params):
+    '''
+    Hacky way of supporting async completion with notdiamond
+    '''
+    model_response = await litellm.acompletion(
+        model=litellm_model,
+        messages=messages,
+        **selected_model_params,
+        **litellm_params,
+    )
+    return model_response
+
+
 def completion(
     model: str,
     messages: list,
@@ -231,10 +245,14 @@ def completion(
     ## COMPLETION CALL
     litellm_params = update_litellm_params(litellm_params)
 
-    model_response = litellm.completion(
-        model=litellm_model,
-        messages=messages,
-        **selected_model_params,
-        **litellm_params,
-    )
+    is_async_call = litellm_params.pop("acompletion", False)
+    if is_async_call:
+        return asyncio.run(async_model_response(litellm_model, messages, selected_model_params, litellm_params))
+    else:
+        model_response = litellm.completion(
+            model=litellm_model,
+            messages=messages,
+            **selected_model_params,
+            **litellm_params,
+        )
     return model_response

@@ -1439,6 +1439,8 @@ def completion(
                 or "https://not-diamond-server.onrender.com/v2/optimizer/router"
             )
 
+            # since notdiamond.completion() internally calls other models' completion functions
+            # streaming does not need to be handled separately
             response = notdiamond.completion(
                 model=model,
                 messages=messages,
@@ -1452,15 +1454,6 @@ def completion(
                 api_key=notdiamond_key,
                 logging_obj=logging,
             )
-
-            if "stream" in optional_params and optional_params["stream"] == True:
-                # don't try to access stream object,
-                response = CustomStreamWrapper(
-                    response,
-                    model,
-                    custom_llm_provider="nlp_cloud",
-                    logging_obj=logging,
-                )
 
             if optional_params.get("stream", False) or acompletion == True:
                 ## LOGGING
