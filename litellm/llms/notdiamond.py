@@ -185,13 +185,21 @@ def completion(
         ):
             optional_params[k] = v
 
+    # separate ND optional params from litellm optional params
+    nd_params = ["llm_providers", "tools", "max_model_depth", "tradeoff", "preference_id", "hash_content"]
+    selected_model_params = dict()
+    for k, v in optional_params.items():
+        if k not in nd_params:
+            selected_model_params[k] = v
+    if "tools" in optional_params:
+        selected_model_params["tools"] = optional_params["tools"]
+    # remove any optional params that are not in the ND params
+    optional_params = {k: v for k, v in optional_params.items() if k in nd_params}
+
     data = {
         "messages": messages,
         **optional_params,
     }
-
-    print("optional_params: ", optional_params)
-    print("litellm_params: ", litellm_params)
 
     ## LOGGING
     logging_obj.pre_call(
@@ -210,7 +218,7 @@ def completion(
         headers=headers,
         json=data,
     )
-    print_verbose(f"raw model_response: {nd_response.text}")
+    print_verbose(f"raw not diamond response: {nd_response.text}")
 
     ## RESPONSE OBJECT
     if nd_response.status_code != 200:
@@ -223,19 +231,10 @@ def completion(
     ## COMPLETION CALL
     litellm_params = update_litellm_params(litellm_params)
 
-    # Handle Tool Calling
-    _is_function_call = True if "tools" in optional_params else False
-    if _is_function_call:
-        model_response = litellm.completion(
-            model=litellm_model,
-            messages=messages,
-            tools=optional_params["tools"],
-            **litellm_params,
-        )
-    else:
-        model_response = litellm.completion(
-            model=litellm_model,
-            messages=messages,
-            **litellm_params,
-        )
+    model_response = litellm.completion(
+        model=litellm_model,
+        messages=messages,
+        **selected_model_params,
+        **litellm_params,
+    )
     return model_response
