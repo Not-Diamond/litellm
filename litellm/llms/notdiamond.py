@@ -1,4 +1,3 @@
-import asyncio
 import types
 import requests
 from typing import Callable, Optional, Dict, List
@@ -6,6 +5,7 @@ import httpx
 
 import litellm
 from litellm.utils import ModelResponse
+from litellm._version import version
 
 
 # dict to map notdiamond providers and models to litellm providers and models
@@ -130,12 +130,15 @@ class NotDiamondConfig:
 
 
 def validate_environment(api_key):
-    # oss endpoint doesn't need an api key
-    api_key = "" if api_key is None else api_key
+    if api_key is None:
+        raise ValueError(
+            "Missing NotDiamond API Key - A call is being made to notdiamond but no key is set either in the environment variables or via params"
+        )
     headers = {
         "Authorization": "Bearer " + api_key,
         "accept": "application/json",
         "content-type": "application/json",
+        "User-Agent": f"litellm/{version}",
     }
     return headers
 
@@ -159,20 +162,8 @@ def update_litellm_params(litellm_params: dict):
             new_litellm_params[k] = v
     if "custom_llm_provider" in new_litellm_params: del new_litellm_params["custom_llm_provider"]
     if "api_base" in new_litellm_params: del new_litellm_params["api_base"]
+    if "api_key" in new_litellm_params: del new_litellm_params["api_key"]
     return new_litellm_params
-
-
-async def async_model_response(litellm_model, messages, selected_model_params, litellm_params):
-    '''
-    Hacky way of supporting async completion with notdiamond
-    '''
-    model_response = await litellm.acompletion(
-        model=litellm_model,
-        messages=messages,
-        **selected_model_params,
-        **litellm_params,
-    )
-    return model_response
 
 
 def completion(
@@ -247,12 +238,16 @@ def completion(
 
     is_async_call = litellm_params.pop("acompletion", False)
     if is_async_call:
-        return asyncio.run(async_model_response(litellm_model, messages, selected_model_params, litellm_params))
-    else:
-        model_response = litellm.completion(
+        return litellm.acompletion(
             model=litellm_model,
             messages=messages,
             **selected_model_params,
             **litellm_params,
         )
-    return model_response
+    else:
+        return litellm.completion(
+            model=litellm_model,
+            messages=messages,
+            **selected_model_params,
+            **litellm_params,
+        )
