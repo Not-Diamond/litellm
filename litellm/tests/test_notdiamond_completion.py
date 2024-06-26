@@ -97,53 +97,66 @@ def test_completion_notdiamond_tool_calling():
         pytest.fail(f"Error occurred: {e}")
 
 
-@pytest.mark.asyncio
+# @pytest.mark.asyncioc
 def test_async_completion_notdiamond():
     import asyncio
 
-    litellm.set_verbose = True
+    litellm.set_verbose = False
 
-    for model in nd_model_list:
-        print("model:", f"{model['provider']}/{model['model']}")
-        async def test_get_response():
-            user_message = "Hello, how are you?"
-            messages = [{"content": user_message, "role": "user"}]
-            try:
-                response = await acompletion(
-                    model="notdiamond/notdiamond",
-                    messages=messages,
-                    llm_providers=[model]
-                )
-                print(response)
-            except litellm.Timeout as e:
-                pass
-            except Exception as e:
-                pytest.fail(f"Error occurred: {e}")
+    async def test_get_response(model):
+        user_message = "Hello, how are you?"
+        messages = [{"content": user_message, "role": "user"}]
+        try:
+            response = await acompletion(
+                model="notdiamond/notdiamond",
+                messages=messages,
+                llm_providers=[model],
+                num_retries=3,
+                timeout=10,
+            )
+            print(response)
+        except litellm.Timeout as e:
+            pass
+        except Exception as e:
+            pytest.fail(f"Error occurred: {e}")
 
-        asyncio.run(test_get_response())
+    async def run_concurrent_tests():
+        result = await asyncio.gather(*[
+            test_get_response(model) for model in nd_model_list
+        ])
+        print(result)
+
+    asyncio.run(run_concurrent_tests())
 
 
-@pytest.mark.asyncioc
+# @pytest.mark.asyncioc
 def test_async_completion_notdiamond_stream():
     import asyncio
 
-    litellm.set_verbose = True
+    litellm.set_verbose = False
 
-    for model in nd_model_list:
-        async def test_get_response():
-            user_message = "Hello, how are you?"
-            messages = [{"content": user_message, "role": "user"}]
-            try:
-                response = await acompletion(
-                    model="notdiamond/notdiamond",
-                    messages=messages,
-                    llm_providers=[model],
-                    stream=True
-                )
-                print(response)
-            except litellm.Timeout as e:
-                pass
-            except Exception as e:
-                pytest.fail(f"Error occurred: {e}")
+    async def test_get_response(model):
+        user_message = "Hello, how are you?"
+        messages = [{"content": user_message, "role": "user"}]
+        try:
+            response = await acompletion(
+                model="notdiamond/notdiamond",
+                messages=messages,
+                llm_providers=[model],
+                num_retries=3,
+                timeout=10,
+                stream=True
+            )
+            print(response)
+        except litellm.Timeout as e:
+            pass
+        except Exception as e:
+            pytest.fail(f"Error occurred: {e}")
 
-        asyncio.run(test_get_response())
+    async def run_concurrent_tests():
+        result = await asyncio.gather(*[
+            test_get_response(model) for model in nd_model_list
+        ])
+        print(result)
+
+    asyncio.run(run_concurrent_tests())
