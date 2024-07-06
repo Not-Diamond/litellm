@@ -9,7 +9,7 @@ from litellm._version import version
 
 
 # dict to map notdiamond providers and models to litellm providers and models
-notdiamond2litellm = {
+ND2LITELLM = {
     # openai
     "openai/gpt-3.5-turbo": "gpt-3.5-turbo-0125",
     "openai/gpt-3.5-turbo-0125": "gpt-3.5-turbo-0125",
@@ -67,7 +67,7 @@ class NotDiamondError(Exception):
         self.status_code = status_code
         self.message = message
         self.request = httpx.Request(
-            method="POST", url="https://not-diamond-server.onrender.com/v2/optimizer/router"
+            method="POST", url="https://not-diamond-server.onrender.com/v2/optimizer/modelSelect"
         )
         self.response = httpx.Response(status_code=status_code, request=self.request)
         super().__init__(
@@ -77,12 +77,7 @@ class NotDiamondError(Exception):
 
 class NotDiamondConfig:
     # llm_providers requires at least one provider, setting to gpt-3.5-turbo as default
-    llm_providers: Optional[List[Dict[str, str]]] = [
-        {
-        "provider": "openai",
-        "model": "gpt-3.5-turbo",
-        }
-    ]
+    llm_providers: List[Dict[str, str]]
     tools: Optional[List[Dict[str, str]]] = None
     max_model_depth: int = 1
     # tradeoff params: "cost"/"latency"
@@ -92,12 +87,7 @@ class NotDiamondConfig:
 
     def __init__(
         self,
-        llm_providers: Optional[List[Dict[str, str]]] = [
-            {
-            "provider": "openai",
-            "model": "gpt-3.5-turbo",
-            }
-        ],
+        llm_providers: List[Dict[str, str]],
         tools: Optional[str] = None,
         max_model_depth: Optional[int] = 1,
         tradeoff: Optional[str] = None,
@@ -147,7 +137,7 @@ def get_litellm_model(response: dict) -> str:
     nd_provider = response['providers'][0]['provider']
     nd_model = response['providers'][0]['model']
     nd_provider_model = f"{nd_provider}/{nd_model}"
-    litellm_model = notdiamond2litellm[nd_provider_model]
+    litellm_model = ND2LITELLM[nd_provider_model]
     return litellm_model
 
 

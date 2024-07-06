@@ -1436,7 +1436,7 @@ def completion(
                 or litellm.api_base
                 or get_secret("NOTDIAMOND_API_BASE")
                 # TODO: confirm?
-                or "https://not-diamond-server.onrender.com/v2/optimizer/router"
+                or "https://not-diamond-server.onrender.com/v2/optimizer/modelSelect"
             )
 
             # since notdiamond.completion() internally calls other models' completion functions
