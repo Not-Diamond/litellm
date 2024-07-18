@@ -76,7 +76,6 @@ class NotDiamondError(Exception):
 
 
 class NotDiamondConfig:
-    # llm_providers requires at least one provider, setting to gpt-3.5-turbo as default
     llm_providers: List[Dict[str, str]]
     tools: Optional[List[Dict[str, str]]] = None
     max_model_depth: int = 1

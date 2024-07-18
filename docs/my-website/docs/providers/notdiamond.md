@@ -1,11 +1,11 @@
 # Not Diamond
-[Not Diamond](https://www.notdiamond.ai/) automatically determines which model is best-suited to respond to any query, for improved quality, and reduced cost and latency. LiteLLM supports automatic model routing to all [models supported by Not Diamond](https://notdiamond.readme.io/v0.1.0-beta/docs/supported-models).
+[Not Diamond](https://www.notdiamond.ai/) automatically determines which model is best-suited to respond to any query, for improved quality, and reduced cost and latency. LiteLLM supports automatic model routing to all [models supported by Not Diamond](https://notdiamond.readme.io/v1.0.0/docs/llm-models).
 
 ## Pre-Requisites
 `pip install litellm`
 
 ## Required API Keys
-Follow this [link](https://notdiamond.readme.io/v0.1.0-beta/docs/api-keys) to create your Not Diamond API key. Additionally, provide API keys for all providers that you want to route between.
+Follow this [link](https://app.notdiamond.ai/keys) to create your Not Diamond API key. Additionally, provide API keys for all providers that you want to route between.
 
 ```python
 os.environ["NOTDIAMOND_API_KEY"] = "NOTDIAMOND_API_KEY"  # NOTDIAMOND_API_KEY
@@ -14,7 +14,7 @@ os.environ["NOTDIAMOND_API_KEY"] = "NOTDIAMOND_API_KEY"  # NOTDIAMOND_API_KEY
 
 :::info
 
-Not Diamond API fails requests when `llm_providers` are not passed. Please provide your desired LLM providers and models to route between.
+Not Diamond's API will fail requests if no `llm_providers` are defined. Please provide your desired LLM providers and models to route between.
 :::
 
 ## Usage
@@ -43,7 +43,8 @@ llm_providers = [
 response = completion(
   model="notdiamond/notdiamond",
   messages=messages,
-  llm_providers=llm_providers
+  llm_providers=llm_providers,
+  # tradeoff="cost"    # optional parameter to optimize for cost (tradeoff="cost") or latency (tradeoff="latency") without degrading quality
 )
 print(response)
 ```
