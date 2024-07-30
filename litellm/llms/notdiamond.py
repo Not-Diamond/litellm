@@ -22,6 +22,9 @@ ND2LITELLM = {
     "openai/gpt-4-turbo-preview": "gpt-4-turbo-preview",
     "openai/gpt-4-0125-preview": "gpt-4-0125-preview",
     "openai/gpt-4-1106-preview": "gpt-4-1106-preview",
+    "openai/gpt-4-1106-preview": "gpt-4-1106-preview",
+    "openai/gpt-4o-mini": "gpt-4o-mini",
+    "openai/gpt-4o-mini-2024-07-18": "gpt-4o-mini-2024-07-18",
     # anthropic
     "anthropic/claude-2.1": "claude-2.1",
     "anthropic/claude-3-opus-20240229": "claude-3-opus-20240229",
@@ -36,6 +39,8 @@ ND2LITELLM = {
     "mistral/open-mistral-7b": "mistral/open-mistral-7b",
     "mistral/open-mixtral-8x7b": "mistral/open-mixtral-8x7b",
     "mistral/open-mixtral-8x22b": "mistral/open-mixtral-8x22b",
+    "mistral/mistral-large-2407": "mistral/mistral-large-2407",
+    "mistral/mistral-large-2402": "mistral/mistral-large-2402",
     # perplexity
     "perplexity/llama-3-sonar-large-32k-online": "perplexity/llama-3-sonar-large-32k-online",
     # cohere
@@ -51,6 +56,7 @@ ND2LITELLM = {
     "replicate/mixtral-8x7b-instruct-v0.1": "replicate/mistralai/mixtral-8x7b-instruct-v0.1",
     "replicate/meta-llama-3-70b-instruct": "replicate/meta/meta-llama-3-70b-instruct",
     "replicate/meta-llama-3-8b-instruct": "replicate/meta/meta-llama-3-8b-instruct",
+    "replicate/meta-llama-3.1-405b-instruct": "replicate/meta/meta-llama-3.1-405b-instruct",
     # togetherai
     "togetherai/Mistral-7B-Instruct-v0.2": "together_ai/mistralai/Mistral-7B-Instruct-v0.2",
     "togetherai/Mixtral-8x7B-Instruct-v0.1": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
@@ -59,6 +65,9 @@ ND2LITELLM = {
     "togetherai/Llama-3-70b-chat-hf": "together_ai/meta-llama/Llama-3-70b-chat-hf",
     "togetherai/Llama-3-8b-chat-hf": "together_ai/meta-llama/Llama-3-8b-chat-hf",
     "togetherai/Qwen2-72B-Instruct": "together_ai/Qwen/Qwen2-72B-Instruct",
+    "togetherai/Meta-Llama-3.1-8B-Instruct-Turbo": "together_ai/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+    "togetherai/Meta-Llama-3.1-70B-Instruct-Turbo": "together_ai/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+    "togetherai/Meta-Llama-3.1-405B-Instruct-Turbo": "together_ai/meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
 }
 
 
