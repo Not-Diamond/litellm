@@ -26,6 +26,8 @@ ND_MODEL_LIST = [
     {"provider": "openai", "model": "gpt-4-turbo-preview"},
     {"provider": "openai", "model": "gpt-4-0125-preview"},
     {"provider": "openai", "model": "gpt-4-1106-preview"},
+    {"provider": "openai", "model": "gpt-4o-mini"},
+    {"provider": "openai", "model": "gpt-4o-mini-2024-07-18"},
     {"provider": "anthropic", "model": "claude-2.1"},
     {"provider": "anthropic", "model": "claude-3-opus-20240229"},
     {"provider": "anthropic", "model": "claude-3-sonnet-20240229"},
@@ -38,6 +40,8 @@ ND_MODEL_LIST = [
     {"provider": "mistral", "model": "open-mistral-7b"},
     {"provider": "mistral", "model": "open-mixtral-8x7b"},
     {"provider": "mistral", "model": "open-mixtral-8x22b"},
+    {"provider": "mistral", "model": "mistral-large-2407"},
+    {"provider": "mistral", "model": "mistral-large-2402"},
     {"provider": "perplexity", "model": "llama-3-sonar-large-32k-online"},
     {"provider": "cohere", "model": "command-r"},
     {"provider": "cohere", "model": "command-r-plus"},
@@ -49,6 +53,7 @@ ND_MODEL_LIST = [
     {"provider": "replicate", "model": "mixtral-8x7b-instruct-v0.1"},
     {"provider": "replicate", "model": "meta-llama-3-70b-instruct"},
     {"provider": "replicate", "model": "meta-llama-3-8b-instruct"},
+    {"provider": "replicate", "model": "meta-llama-3.1-405b-instruct"},
     {"provider": "togetherai", "model": "Mistral-7B-Instruct-v0.2"},
     {"provider": "togetherai", "model": "Mixtral-8x7B-Instruct-v0.1"},
     {"provider": "togetherai", "model": "Mixtral-8x22B-Instruct-v0.1"},
@@ -56,6 +61,9 @@ ND_MODEL_LIST = [
     {"provider": "togetherai", "model": "Llama-3-70b-chat-hf"},
     {"provider": "togetherai", "model": "Llama-3-8b-chat-hf"},
     {"provider": "togetherai", "model": "Qwen2-72B-Instruct"},
+    {"provider": "togetherai", "model": "Meta-Llama-3.1-8B-Instruct-Turbo"},
+    {"provider": "togetherai", "model": "Meta-Llama-3.1-70B-Instruct-Turbo"},
+    {"provider": "togetherai", "model": "Meta-Llama-3.1-405B-Instruct-Turbo"},
 ]
 
 ND_TOOLS_MODEL_LIST = [
@@ -70,6 +78,8 @@ ND_TOOLS_MODEL_LIST = [
     {"provider": "openai", "model": "gpt-4-turbo-preview"},
     {"provider": "openai", "model": "gpt-4-0125-preview"},
     {"provider": "openai", "model": "gpt-4-1106-preview"},
+    {"provider": "openai", "model": "gpt-4o-mini"},
+    {"provider": "openai", "model": "gpt-4o-mini-2024-07-18"},
     {"provider": "anthropic", "model": "claude-3-opus-20240229"},
     {"provider": "anthropic", "model": "claude-3-sonnet-20240229"},
     {"provider": "anthropic", "model": "claude-3-5-sonnet-20240620"},
@@ -95,6 +105,7 @@ def test_completion_notdiamond():
             },
         ]
         for model in ND_MODEL_LIST:
+            print(f"Testing {model}")
             response = completion(
                 model="notdiamond/notdiamond",
                 messages=messages,
